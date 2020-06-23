@@ -4,26 +4,26 @@ package observer;
 public aspect Connector {
 	int pasos = 1;
 	
-	pointcut register() : call(void setBlack()) || call(void setBlue()) || call(void setRed()) ||
-	   call (void createRoot()) || call (void createButtonPanel()) || call (* createButton());
+	pointcut register() : call(void setColor(String)) || call (void createRoot()) || 
+						  call (void createButtonPanel()) || call (* createButton(String));
 	after() : register(){
 		System.out.print("Paso "+pasos+": ");
 		pasos++;
 	}
 	
-	pointcut black() : call(void setBlack());
-	after() : black(){
-		System.out.println("Color Cambiado a NEGRO");
-	}
-	
-	pointcut blue() : call(void setBlue());
-	after() : blue(){
-		System.out.println("Color Cambiado a AZUL");
-	}
-	
-	pointcut red() : call(void setRed());
-	after() : red(){
-		System.out.println("Color Cambiado a ROJO");
+	pointcut cambiarColor(String color) : call(* setColor(String)) && args(color);
+	after(String color) : cambiarColor(color){
+		switch(color) {
+			case "negro":
+				System.out.println("El color es NEGRO");
+				break;
+			case "azul":
+				System.out.println("El color es AZUL");
+				break;
+			case "rojo":
+				System.out.println("El color es ROJO");
+				break;
+		}
 	}
 	
 	pointcut root() : call (void createRoot());
@@ -36,7 +36,7 @@ public aspect Connector {
 		System.out.println("Creado el panel de botones");
 	}
 	
-	pointcut button() : call (* createButton());
+	pointcut button() : call (* createButton(String));
 	after() : button(){
 		System.out.println("Creado un nuevo botón.");
 	}

@@ -1,12 +1,10 @@
 package main;
 
-import Components.BlackButton;
-import Components.BlueButton;
-import Components.RedButton;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class MainMenu {
 	private VBox root;
@@ -26,10 +24,34 @@ public class MainMenu {
 	}
 	
 	private void createButtonPanel() {
-		Button negro = new BlackButton(scene).createButton();
-	    Button rojo = new BlueButton(scene).createButton();
-	    Button azul = new RedButton(scene).createButton();
+		Button negro = createButton("Negro");
+	    Button rojo = createButton("Rojo");
+	    Button azul = createButton("Azul");
 	    root.getChildren().addAll(negro, rojo, azul);
+	}
+	
+	private Button createButton(String color) {
+		Button btn = new Button(color);
+		btn.setText(color);
+		btn.setMinWidth(100);
+		btn.setOnAction(e -> {
+			setColor(color.toLowerCase());
+		});
+		return btn;
+	}
+	
+	public void setColor(String color) {
+		switch(color) {
+			case "negro":
+				scene.setFill(Color.BLACK);
+				break;
+			case "azul":
+				scene.setFill(Color.BLUE);
+				break;
+			case "rojo":
+				scene.setFill(Color.RED);
+				break;
+		}
 	}
 	
 	public VBox getRoot() {
